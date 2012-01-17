@@ -1,6 +1,7 @@
-./obj
-./bin
+/obj
+/bin
 *.a
 *.o
 *.avi
-./cap
+*.avi*
+/cap
