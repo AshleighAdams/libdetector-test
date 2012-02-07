@@ -1,7 +1,7 @@
 
 #include "Instance.h"
 
-#include "libdetector/include/libdetector.h"
+#include "libdetector/libdetector.h"
 
 using namespace Detector;
 
@@ -104,71 +104,71 @@ Instance::Instance(Gwen::Controls::Canvas* Parent, CvCapture* Capture, int Cap, 
 		Blue.r = 0;
 		Blue.g = 0;
 		Blue.b = 255;
-		
+
 		Orange.r = 255;
 		Orange.g = 165;
 		Orange.b = 0;
 	}
-		
+
 	m_pDetFrame = 0;
-	
+
 	m_pParent = Parent;
 	m_pCapture = Capture;
-		
+
 	m_pDetector = new CDetector(imgsize);
 	m_pObjectTracker = new CObjectTracker();
-	
+
 	m_pDetector->SetDiffrenceThreshold(65);
-	
+
 	//m_pDetector->SetDiffrenceThreshold(100);
-	
-	
+
+
 	//m_pObjectTracker->SetEvent(EVENT_NEWTARG, this->NewObject );
-	
+
 	char titlecam[128];
 	char titleset[128];
 	char titleinf[128];
 	sprintf(titlecam, "Capture: %i", Cap);
 	sprintf(titleset, "Capture Settings: %i", Cap);
 	sprintf(titleinf, "Capture Info: %i", Cap);
-	
+
 	m_pWindowCam = new Gwen::Controls::WindowControl(m_pParent);
 	m_pWindowCam->SetSize( imgsize.width, imgsize.height );
 	m_pWindowCam->SetClosable(false);
 	m_pWindowCam->SetTitle(titlecam);
 	m_pWindowCam->SetPos(30, 30);
-	
+
 	m_pWindowSet = new Gwen::Controls::WindowControl(m_pParent);
 	m_pWindowSet->SetSize( 200, 240 );
 	m_pWindowSet->SetClosable(false);
 	m_pWindowSet->SetTitle(titleset);
 	m_pWindowSet->SetPos(imgsize.width + 15, 30);
-	
+
 	m_pWindowInfo = new Gwen::Controls::WindowControl(m_pParent);
 	m_pWindowInfo->SetSize( 200, 100 );
 	m_pWindowInfo->SetClosable(false);
 	m_pWindowInfo->SetTitle(titleinf);
 	m_pWindowInfo->SetPos(30, imgsize.height);
-	
+
 	m_pCeckBoxRecord = new Gwen::Controls::CheckBoxWithLabel(m_pWindowSet);
 	m_pCeckBoxRecord->Label()->SetText("Record Motion", false);
 	//m_pCeckBoxRecord->Checkbox()->IsChecked();
 	m_pCeckBoxRecord->SetPos(5, 5);
-	
+
 	m_pImage = new Gwen::Controls::ImagePanel(m_pWindowCam);
-	
-	Gwen::Texture* tex 	= m_pImage->_GetTexture();
+
+	Gwen::Texture* tex 	= (Gwen::Texture*)m_pImage->m_Texture.data;
 	sf::Context context;
 	sf::Image* sftex 	= new sf::Image(imgsize.width, imgsize.height, sf::Color::Cyan);
 	tex->width 			= imgsize.width;
 	tex->height 		= imgsize.height;
 	tex->data 			= sftex;
-	
+
 	printf("Loaded cam: (%i, %i)\n", tex->width, tex->height);
-	
+
 	//m_pImage->SetImage("loading.png");
 	m_pImage->SizeToContents();
-	
+
 /*	const sf::Image* tex = static_cast<sf::Image*>( m_pImage->_GetTexture()->data );
 	if ( !tex )
 		printf("Warning: Failed to load \"loading.png\"!\n");
@@ -177,28 +177,28 @@ Instance::Instance(Gwen::Controls::Canvas* Parent, CvCapture* Capture, int Cap, 
 	TotMotLbl->SetText("Motion    ");
 	TotMotLbl->SizeToContents();
 	TotMotLbl->SetPos(5, 7);
-	
+
 	m_pProgTotalMotion = new Gwen::Controls::ProgressBar(m_pWindowInfo);
 	m_pProgTotalMotion->SetValue(0.5f);
 	m_pProgTotalMotion->SetSize(135, 20);
 	m_pProgTotalMotion->SetPos(50, 5);
-	
+
 	Gwen::Controls::Button* pResetMotionBut = new Gwen::Controls::Button(m_pWindowSet);
 	pResetMotionBut->SetPos(0,50);
 	pResetMotionBut->SetSize(100, 20);
 	pResetMotionBut->SetText("Reset Motion");
 	pResetMotionBut->onPress.Add(pResetMotionBut, &Instance::ResetMotion);
-	
-	
+
+
 	// Now to load rest of detector stuffs
-	
+
 	double sleeptime = GetCurrentTime();
 	while(sleeptime + 5 > GetCurrentTime()) m_pFrame = cvQueryFrame( m_pCapture );
 
 	CvSize imgSize;
 	imgSize.width = imgsize.width;
 	imgSize.height = imgsize.height;
-	
+
 	if(filename != 0)
 		m_pVideoWriter = cvCreateVideoWriter(filename, CV_FOURCC('M', 'J', 'P', 'G'), 10.0, imgSize);
 	else
@@ -209,11 +209,11 @@ Instance::~Instance()
 {
 	if(m_pVideoWriter)
 		cvReleaseCapture(&m_pCapture);
-	
+
 	m_pWindowCam->Hide(); // IDK FUK U
 	m_pWindowInfo->Hide();
 	m_pWindowSet->Hide();
-	
+
 	cvReleaseCapture(&m_pCapture);
 }
 
@@ -234,7 +234,7 @@ CDetectorImage* Instance::GetImage()
 	if(!m_pDetFrame)
 		m_pDetFrame = new CDetectorImage(m_pFrame->width, m_pFrame->height);
 	UpdateFrame(m_pFrame, m_pDetFrame);
-	
+
 	return m_pDetFrame;
 }
 
@@ -242,9 +242,9 @@ void Instance::Tick()
 {
 	CDetectorImage* pImg = this->GetImage();
 	m_pDetector->PushImage(pImg);
-	
+
 	m_pProgTotalMotion->SetValue(m_pDetector->GetTotalMotion());
-	
+
 	// Get and push the new targets.
 	int count = m_pDetector->GetTargets(m_Targets);
 	m_pObjectTracker->PushTargets(m_Targets, count);
@@ -254,10 +254,10 @@ void Instance::Tick()
 
 	pImg->DrawColor(Red);
 	for(int i = 0; i < count; i++)
-		pImg->DrawTarget(m_Targets[i]);		
+		pImg->DrawTarget(m_Targets[i]);
 
 	pImg->DrawColor(Green);
-	
+
 	bool save = false;
 	for(CTrackedObject* Obj : Objs)
 	{
@@ -265,9 +265,9 @@ void Instance::Tick()
 		pImg->DrawTarget(Obj);
 		DrawTrails(pImg, Obj);
 	}
-	
+
 	// Lets update the GUI capture thread texture thing
-	sf::Image* tex = static_cast<sf::Image*>( m_pImage->_GetTexture()->data );
+	sf::Image* tex = static_cast<sf::Image*>( m_pImage->m_Texture.data );
 	sf::Color col;
 	color_t* pix;
 	XY_LOOP(m_pFrame->width, m_pFrame->height)
@@ -278,32 +278,32 @@ void Instance::Tick()
 		col.b = pix->b;
 		tex->SetPixel(x, y, col);
 	}
-	
+
 	UpdateFrame(pImg, m_pFrame);
 	if(m_pVideoWriter && m_pCeckBoxRecord->Checkbox()->IsChecked() && save)
 		cvWriteFrame(m_pVideoWriter, m_pFrame); // Wont draw boxes, no need really
-	
+
 	// Following comment is just something to save the target to a histogram, ignore it
 	/*
 	if(g_Count > 0 && false)
 	{
 		target_t* targ = g_Targets[0];
 		motion_t* mot = g_pDetector->GetMotionImage();
-		
+
 		int startx = mot->size.width * targ->x;
 		int starty = mot->size.height * targ->y;
-		
+
 		int endx = mot->size.width * (targ->x + targ->width);
 		int endy = mot->size.height * (targ->y + targ->height);
-		
+
 		int w = endx - startx;
 		int h = endy - starty;
-		
+
 		CDetectorImage* img = new CDetectorImage(w, h);
-		
+
 		pixel_t* pix;
 		int col;
-		
+
 		XY_LOOP_START(startx, starty, endx, endy)
 		{
 			col = PMOTION_XY(mot, x, y) > 0 ? 255 : 0;
@@ -312,17 +312,17 @@ void Instance::Tick()
 			pix->g = col;
 			pix->b = col;
 		}
-		
+
 		char* str = new char[255];
 		sprintf(str, "save_%f.xdi", GetCurrentTime() );
-		
+
 		img->Save(str);
 		img->UnRefrence();
-		
+
 		delete str;
 	}
 	*/
-	
+
 	// Nothing important right now
 	/*
 	Image->DrawColor(Blue);
@@ -347,7 +347,7 @@ void Instance::Tick()
 	}
 	position_t pos1;
 	position_t pos2;
-	
+
 	Image->DrawColor(Orange);
 
 	for(int i = 0; i < 360; i++)
@@ -362,9 +362,9 @@ void Instance::Tick()
 		pos2.x = pos1.x;
 		pos2.y = pos1.y;
 	}
-	
+
 	bool WriteFrame = ProccessFrame(pImg);
-		
+
 	if(WriteFrame && m_pCeckBoxRecord->Checkbox()->IsChecked())
 	{
 		UpdateFrame(pImg, m_pFrame);

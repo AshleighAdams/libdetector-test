@@ -103,3 +103,75 @@
 1326752828 /home/c0bra/Projects/libdetectortest/src/InstanceManager.h
 	"Instance.h"
 
+1328626519 source:/home/c0bra/Projects/libdetector-test/src/Instance.cpp
+	"Instance.h"
+	"libdetector/libdetector.h"
+
+1328109655 /home/c0bra/Projects/libdetector-test/src/Instance.h
+	<thread>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<time.h>
+	<string.h>
+	<vector>
+	<list>
+	<cmath>
+	"opencv/cv.h"
+	"opencv/highgui.h"
+	"libdetector/libdetector.h"
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+	<cmath>
+	"Gwen/Gwen.h"
+	"Gwen/BaseRender.h"
+	"Gwen/Utility.h"
+	"Gwen/Font.h"
+	"Gwen/Texture.h"
+	"Gwen/Renderers/SFML.h"
+	"Gwen/Input/SFML.h"
+	"Gwen/Skins/Simple.h"
+	"Gwen/Skins/TexturedBase.h"
+	"Gwen/Controls/WindowControl.h"
+	"Gwen/Controls/Button.h"
+	"Gwen/Controls/CheckBox.h"
+	"Gwen/Controls/TextBox.h"
+	"Gwen/Controls/ImagePanel.h"
+	"Gwen/Controls/ProgressBar.h"
+
+1328106663 source:/home/c0bra/Projects/libdetector-test/src/InstanceManager.cpp
+	"InstanceManager.h"
+	"Instance.h"
+
+1328106663 /home/c0bra/Projects/libdetector-test/src/InstanceManager.h
+	"Instance.h"
+
+1328626532 source:/home/c0bra/Projects/libdetector-test/src/main.cpp
+	<thread>
+	<stdio.h>
+	<stdlib.h>
+	<iostream>
+	<time.h>
+	<string.h>
+	<vector>
+	<list>
+	<cmath>
+	<unordered_map>
+	"opencv/cv.h"
+	"opencv/highgui.h"
+	<SFML/System.hpp>
+	<SFML/Graphics.hpp>
+	<cmath>
+	"Gwen/Gwen.h"
+	"Gwen/BaseRender.h"
+	"Gwen/Utility.h"
+	"Gwen/Font.h"
+	"Gwen/Texture.h"
+	"Gwen/Renderers/SFML.h"
+	"Gwen/Input/SFML.h"
+	"Gwen/Skins/Simple.h"
+	"Gwen/Skins/TexturedBase.h"
+	"Gwen/Controls/WindowControl.h"
+	"libdetector/libdetector.h"
+	"InstanceManager.h"
+

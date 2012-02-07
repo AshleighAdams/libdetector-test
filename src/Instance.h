@@ -20,7 +20,7 @@ using namespace std; // OpenCV needs this else we get 500 errors....
 
 // Detector includes (must be after OpenCV)
 #define DETECTOR_OPENCV
-#include "libdetector/include/libdetector.h"
+#include "libdetector/libdetector.h"
 
 #define XY_LOOP_START(_x_,_y_,_endx_,_endy_) \
 	for(int y = _y_; y < _endy_; y++)\
@@ -63,7 +63,7 @@ public:
 	Instance(Gwen::Controls::Canvas* Parent, CvCapture* Capture, int Cap, Detector::imagesize_t imgsize, char* filename);
 	~Instance();
 	void Draw();
-	void Tick(); // Will be called from 
+	void Tick(); // Will be called from
 	bool Failed()
 	{
 		return m_Failed;
@@ -75,7 +75,7 @@ protected:
 	void UpdateObject(Detector::CTrackedObject* Obj, bool Simulated);
 	void LostObject(Detector::CTrackedObject* Obj);
 	Detector::CDetectorImage* GetImage();
-	
+
 	Gwen::Controls::Canvas* 			m_pParent;
 	Gwen::Controls::WindowControl* 		m_pWindowCam;
 	Gwen::Controls::WindowControl* 		m_pWindowSet;
@@ -83,16 +83,16 @@ protected:
 	Gwen::Controls::CheckBoxWithLabel* 	m_pCeckBoxRecord;
 	Gwen::Controls::ImagePanel*			m_pImage;
 	Gwen::Controls::ProgressBar*		m_pProgTotalMotion;
-	
+
 	CvCapture* 							m_pCapture;
 	CvVideoWriter* 						m_pVideoWriter;
 	bool								m_bResttingMot;
 	Detector::CDetector*				m_pDetector;
 	Detector::CObjectTracker*			m_pObjectTracker;
-	
+
 	IplImage* 							m_pFrame;
 	Detector::CDetectorImage*			m_pDetFrame;
-	
+
 	Detector::target_t* 				m_Targets[MAX_TARGETS];
 	void DrawTrails(Detector::CDetectorImage* Img, Detector::CTrackedObject* Obj);
 	ObjectTrail* 						m_pTrails[1024];
